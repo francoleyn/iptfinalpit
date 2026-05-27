@@ -1,0 +1,266 @@
+{
+  "info": {
+    "name": "Skill Swap API",
+    "description": "Skill Swap Platform — trade knowledge instead of money.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://127.0.0.1:8000/api" },
+    { "key": "token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "00 - Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Alice\",\n  \"email\": \"alice@example.com\",\n  \"password\": \"password\",\n  \"password_confirmation\": \"password\",\n  \"bio\": \"Designer learning guitar\",\n  \"location\": \"Manila\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{base_url}}/register"
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    pm.environment.set('token', pm.response.json().token);",
+                  "    pm.collectionVariables.set('token', pm.response.json().token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"alice@skillswap.test\",\n  \"password\": \"password\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{base_url}}/login"
+          }
+        },
+        {
+          "name": "Get Me",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/me"
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/logout"
+          }
+        }
+      ]
+    },
+    {
+      "name": "01 - Skills",
+      "item": [
+        {
+          "name": "List Skills",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/skills"
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - My Offers",
+      "item": [
+        {
+          "name": "Add Offer",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"skill_id\": 16,\n  \"proficiency_level\": \"advanced\",\n  \"description\": \"Photo retouching and compositing\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{base_url}}/offers"
+          }
+        },
+        {
+          "name": "List My Offers",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/offers"
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 - My Wants",
+      "item": [
+        {
+          "name": "Add Want",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"skill_id\": 12,\n  \"priority\": \"high\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{base_url}}/wants"
+          }
+        },
+        {
+          "name": "List My Wants",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/wants"
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 - Swap Requests",
+      "item": [
+        {
+          "name": "Send Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"receiver_id\": 2,\n  \"offered_skill_id\": 16,\n  \"requested_skill_id\": 12,\n  \"message\": \"Want to swap Photoshop for Guitar lessons?\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{base_url}}/swaps"
+          }
+        },
+        {
+          "name": "List Swaps",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/swaps"
+          }
+        },
+        {
+          "name": "Accept Request",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/swaps/1/accept"
+          }
+        },
+        {
+          "name": "Complete Request",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/swaps/1/complete"
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 - Reviews",
+      "item": [
+        {
+          "name": "Leave Review",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"swap_request_id\": 1,\n  \"reviewee_id\": 2,\n  \"rating\": 5,\n  \"comment\": \"Great guitar teacher!\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{base_url}}/reviews"
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 - Matching (Innovation)",
+      "item": [
+        {
+          "name": "Find Perfect Matches",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/matches"
+          }
+        },
+        {
+          "name": "Find Partial Matches",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Accept", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": "{{base_url}}/matches/partial"
+          }
+        },
+        {
+          "name": "User Profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": "{{base_url}}/users/2/profile"
+          }
+        }
+      ]
+    }
+  ]
+}
