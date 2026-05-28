@@ -37,7 +37,8 @@
             "composer install",
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
             "@php artisan key:generate",
-            "@php artisan migrate --force",
+            "@php -r \"$env = file_exists('.env') ? file_get_contents('.env') : ''; if (! preg_match('/^\\s*DB_CONNECTION\\s*=\\s*pgsql/m', $env)) { if (! file_exists('database/database.sqlite')) { touch('database/database.sqlite'); } }\"",
+            "@php artisan migrate --force --seed",
             "npm install",
             "npm run build"
         ],
@@ -61,8 +62,8 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi",
-            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
-            "@php artisan migrate --graceful --ansi"
+            "@php -r \"$env = file_exists('.env') ? file_get_contents('.env') : ''; if (! preg_match('/^\\s*DB_CONNECTION\\s*=\\s*pgsql/m', $env)) { if (! file_exists('database/database.sqlite')) { touch('database/database.sqlite'); } }\"",
+            "@php artisan migrate --graceful --ansi --seed"
         ],
         "pre-package-uninstall": [
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
