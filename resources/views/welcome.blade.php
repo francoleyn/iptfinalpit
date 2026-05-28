@@ -68,18 +68,23 @@
             <p class="text-sm font-medium lux-text-muted">Skill categories on the platform</p>
             <div class="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
                @foreach ([
-                 ['💻', 'Coding'],
-                 ['🌐', 'Languages'],
-                 ['🎵', 'Music'],
-                 ['🎨', 'Art'],
-                 ['⚽', 'Sports'],
-                 ['🍳', 'Cooking']
-            ] as [$icon, $cat])
-                <div class="tp-partner hover:scale-105 transition duration-300 cursor-pointer flex items-center justify-center gap-2">
-                <span>{{ $icon }}</span>
-                <span>{{ $cat }}</span>
-             </div>
-        @endforeach
+                     ['💻', 'Coding'],
+                     ['🌐', 'Languages'],
+                     ['🎵', 'Music'],
+                     ['🎨', 'Art'],
+                     ['⚽', 'Sports'],
+                     ['🍳', 'Cooking']
+                ] as [$icon, $cat])
+                    <div class="tp-partner skill-card flex flex-col items-center justify-center gap-2
+                    cursor-pointer transition-all duration-300
+                    hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20 hover:border-blue-400/40
+                    border border-white/10 rounded-lg p-4"
+         onclick="selectSkill(this, '{{ $cat }}')">
+
+        <span class="text-2xl">{{ $icon }}</span>
+        <span class="font-medium text-white">{{ $cat }}</span>
+    </div>
+@endforeach
             </div>
         </section>
 
