@@ -15,9 +15,17 @@ export class SkillSwapApp {
         this.view = 'overview';
     }
 
-    init() {
+    async init() {
         this.renderShell();
         this.bindShellEvents();
+
+        // Always preload skills so select dropdowns can render options
+        // even before authentication (skills endpoint is public).
+        try {
+            await this.loadSkills();
+        } catch (e) {
+            // ignore load errors; skills will be reloaded after auth
+        }
 
         if (this.api.token) {
             this.bootstrapSession().catch(() => this.showAuth(this.authModeFromPath()));
@@ -135,6 +143,11 @@ export class SkillSwapApp {
             content.innerHTML = this.renderOverview();
             this.bindOverviewEvents();
         } else if (this.view === 'skills') {
+            // ensure we have the latest skills (useful after seeding or changes)
+            try {
+                await this.loadSkills();
+            } catch (_) {}
+
             this.renderPageHeader('My Skills', 'Manage what you teach and what you want to learn.');
             content.innerHTML = this.renderSkillsPage();
             this.bindSkillsEvents();

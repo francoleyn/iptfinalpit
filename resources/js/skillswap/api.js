@@ -51,7 +51,12 @@ export class ApiClient {
     }
 
     skills() {
-        return this.request('/skills');
+        return this.request('/skills').then((data) => {
+            try {
+                console.log('skills fetched:', data);
+            } catch (_) {}
+            return data;
+        });
     }
 
     offers() {
