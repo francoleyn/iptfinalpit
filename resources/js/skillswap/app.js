@@ -15,9 +15,17 @@ export class SkillSwapApp {
         this.view = 'overview';
     }
 
-    init() {
+    async init() {
         this.renderShell();
         this.bindShellEvents();
+
+        // Always preload skills so select dropdowns can render options
+        // even before authentication (skills endpoint is public).
+        try {
+            await this.loadSkills();
+        } catch (e) {
+            // ignore load errors; skills will be reloaded after auth
+        }
 
         if (this.api.token) {
             this.bootstrapSession().catch(() => this.showAuth(this.authModeFromPath()));
@@ -56,19 +64,8 @@ export class SkillSwapApp {
         this.root.innerHTML = `
             <div class="lux-page">
             <div id="ss-toast" class="hidden"></div>
-            <div id="ss-auth" class="hidden"></div>
-            <div id="ss-dashboard" class="hidden min-h-screen lg:grid lg:grid-cols-[280px_1fr]">
-                <aside class="lux-sidebar border-b lg:border-b-0 lg:border-r">
-                    <div class="px-6 py-6">
-                        <a href="/" class="lux-logo">Skill<span>Swap</span></a>
-                        <p id="ss-user-label" class="mt-3 hidden text-xs lux-text-muted lg:block"></p>
-                    </div>
-                    <nav id="ss-nav" class="flex gap-1 overflow-x-auto px-4 pb-4 lg:flex-col lg:overflow-visible lg:px-4 lg:pb-6"></nav>
-                    <div class="hidden px-4 pb-6 lg:block">
-                        <div class="lux-divider mb-4"></div>
-                        <button id="ss-logout" class="lux-btn-ghost w-full text-center text-xs">Sign out</button>
-                    </div>
-                </aside>
+            <div id="ss-auth"></div>
+            <div id="ss-dashboard" class="hidden min-h-screen">
                 <main class="px-4 py-8 sm:px-10 lg:py-10">
                     <div id="ss-page-header" class="mb-8"></div>
                     <div id="ss-content"></div>
@@ -79,7 +76,6 @@ export class SkillSwapApp {
     }
 
     bindShellEvents() {
-        this.root.querySelector('#ss-logout').addEventListener('click', () => this.handleLogout());
     }
 
     showAuth(mode = 'login') {
@@ -135,6 +131,11 @@ export class SkillSwapApp {
             content.innerHTML = this.renderOverview();
             this.bindOverviewEvents();
         } else if (this.view === 'skills') {
+            // ensure we have the latest skills (useful after seeding or changes)
+            try {
+                await this.loadSkills();
+            } catch (_) {}
+
             this.renderPageHeader('My Skills', 'Manage what you teach and what you want to learn.');
             content.innerHTML = this.renderSkillsPage();
             this.bindSkillsEvents();
