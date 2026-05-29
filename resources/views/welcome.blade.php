@@ -32,11 +32,13 @@
                         Trade knowledge instead of money. List what you can teach, what you want to learn, and our matching engine connects you with the perfect swap partner — instantly.
                     </p>
                     <div class="mt-8 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
-                        <a href="/register" class="lux-btn-gold">Get Started Now</a>
+                       <a href="/register" class="lux-btn-gold hover:shadow-lg hover:scale-105 transition duration-300">
+    Get Started Now
+</a>
                         <a href="#features" class="lux-btn-ghost">Explore Features</a>
                     </div>
                 </div>
-                <div class="lux-card lux-card-glow p-6 lg:p-8">
+                <div class="lux-card lux-card-glow p-6 lg:p-8 hover:scale-[1.02] transition duration-300">
                     <p class="lux-label">Live match preview</p>
                     <div class="mt-4 space-y-3">
                         <div class="lux-card-inner p-4">
@@ -65,9 +67,24 @@
         <section class="lux-animate-in lux-animate-delay-2 mt-24 text-center">
             <p class="text-sm font-medium lux-text-muted">Skill categories on the platform</p>
             <div class="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-                @foreach (['Coding', 'Languages', 'Music', 'Art', 'Sports', 'Cooking'] as $cat)
-                    <div class="tp-partner">{{ $cat }}</div>
-                @endforeach
+               @foreach ([
+                     ['💻', 'Coding'],
+                     ['🌐', 'Languages'],
+                     ['🎵', 'Music'],
+                     ['🎨', 'Art'],
+                     ['⚽', 'Sports'],
+                     ['🍳', 'Cooking']
+                ] as [$icon, $cat])
+                    <div class="tp-partner skill-card flex flex-col items-center justify-center gap-2
+                    cursor-pointer transition-all duration-300
+                    hover:scale-105 hover:shadow-lg hover:shadow-blue-500/20 hover:border-blue-400/40
+                    border border-white/10 rounded-lg p-4"
+         onclick="selectSkill(this, '{{ $cat }}')">
+
+        <span class="text-2xl">{{ $icon }}</span>
+        <span class="font-medium text-white">{{ $cat }}</span>
+    </div>
+@endforeach
             </div>
         </section>
 
@@ -150,7 +167,7 @@
         </section>
 
         <footer class="mt-20 border-t border-white/5 pt-8 text-center">
-            <p class="text-sm lux-text-muted">© {{ date('Y') }} SkillSwap. All rights reserved.</p>
+            <p class="text-sm lux-text-muted tracking-wide">© {{ date('Y') }} SkillSwap — Built for Smart Skill Exchange</p>
         </footer>
     </div>
 </div>
