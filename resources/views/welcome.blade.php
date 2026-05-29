@@ -29,7 +29,7 @@
                         <span class="lux-text-gold">Smart Skill Swap</span>
                     </h1>
                     <p class="mx-auto mt-6 max-w-xl text-base leading-relaxed lux-text-muted lg:mx-0 lg:text-lg">
-                        Trade knowledge instead of money. List what you can teach, what you want to learn, and our matching engine connects you with the perfect swap partner — instantly.
+                        Trade knowledge instead of money. This platform connects users looking to swap skills instantly. Updated and tested locally by Faisal.
                     </p>
                     <div class="mt-8 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
                        <a href="/register" class="lux-btn-gold hover:shadow-lg hover:scale-105 transition duration-300">
