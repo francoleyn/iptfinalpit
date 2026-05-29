@@ -165,6 +165,10 @@ export class SkillSwapApp {
                         <input type="password" name="password" value="password" required placeholder="Password" class="lux-input">
                         <button type="submit" class="lux-btn-gold w-full">Sign In</button>
                     </form>
+                    <p class="mt-6 text-center text-sm lux-text-muted">
+                        New member?
+                        <button id="ss-go-register" class="text-blue-400 hover:text-blue-300">Sign up free</button>
+                    </p>
                     <p id="ss-auth-error" class="mt-3 hidden text-sm text-red-400"></p>
                 </div>
             </div>
@@ -187,6 +191,10 @@ export class SkillSwapApp {
                         <textarea name="bio" rows="3" placeholder="A brief introduction" class="lux-textarea"></textarea>
                         <button type="submit" class="lux-btn-gold w-full">Create account</button>
                     </form>
+                    <p class="mt-6 text-center text-sm lux-text-muted">
+                        Already a member?
+                        <button id="ss-go-login" class="text-blue-400 hover:text-blue-300">Sign in</button>
+                    </p>
                     <p id="ss-auth-error" class="mt-3 hidden text-sm text-red-400"></p>
                 </div>
             </div>
@@ -197,6 +205,7 @@ export class SkillSwapApp {
         const errorEl = this.root.querySelector('#ss-auth-error');
 
         if (mode === 'login') {
+            this.root.querySelector('#ss-go-register').addEventListener('click', () => this.showAuth('register'));
             this.root.querySelector('#ss-login-form').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 errorEl.classList.add('hidden');
@@ -219,6 +228,7 @@ export class SkillSwapApp {
                 }
             });
         } else {
+            this.root.querySelector('#ss-go-login').addEventListener('click', () => this.showAuth('login'));
             this.root.querySelector('#ss-register-form').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 errorEl.classList.add('hidden');
